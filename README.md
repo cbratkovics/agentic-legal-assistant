@@ -1,62 +1,77 @@
 # 🧠 Agentic Legal Assistant
 
-A LangGraph-powered multi-agent AI system for answering legal questions grounded in uploaded contracts. This project leverages Retrieval-Augmented Generation (RAG) to extract and cite relevant sections from legal documents like contracts and agreements.
+A LangGraph-powered multi-agent AI system for answering legal questions grounded in uploaded contracts. This system uses Retrieval-Augmented Generation (RAG) to extract and cite relevant sections from legal documents like contracts and agreements.
 
 ---
 
 ## ✅ Key Features
 
-- 🔍 Accepts natural language legal questions
-- 📄 Parses uploaded PDF contracts
-- 🧠 Uses multi-agent LangGraph orchestration
-- 📚 Retrieves relevant context with citations
-- ✍️ Returns grounded summaries using OpenAI GPT-4
+* Accepts natural language legal questions
+* Parses uploaded PDF contracts
+* Uses multi-agent LangGraph orchestration
+* Retrieves relevant context with citations
+* Returns grounded summaries using OpenAI GPT-4
 
 ---
 
-## 🧠 Architecture
+## 🏗️ Architecture
 
-```mermaid
-flowchart TD
-    A([User Input]) --> B([Legal Question])
-    B --> C{Chat Agent<br>(LLM Decision)}
-    C -->|1. Calls Tool| D[Tool Node<br>(Retriever)]
-    D -->|2. Returns Context| E([Return Context])
-    E -->|3. Sends Back to Agent| C
-    C -->|4. Final Answer| F([Grounded Answer])
+![Architecture Diagram](outputs/architecture_diagram.png)
+
+> Nodes are color-coded:
+> **🟦 Input**, **🟧 Tool**, **🟩 Result**, 🛡️ System Output
+> **⬦ Diamond** = Agent decision logic (LLM), 📄 Parallelogram = user input/output, 👤 User
+
+### Agent Workflow
+
+1. **User Input**: A legal question is submitted.
+2. **LLM Agent**: Decides whether tool assistance is required.
+3. **Tool Node**: Retrieves context from vector DB.
+4. **Agent**: Uses result to compose grounded, cited response.
+
+---
+
+### 🔁 LangGraph Flow (ASCII View)
+
+```
++------------------+
+|   User Input     |
++------------------+
+      |
+      v
++---------------------------+
+|   Legal Question Input    |
++---------------------------+
+      |
+      v
++------------------------------+
+| Chat Agent (LLM Decision)   |
++------------------------------+
+      |---(1) Calls Tool--->
+      v
++------------------------------+
+|  Tool Node (Retriever)      |
++------------------------------+
+      |---(2) Returns Context--->
+      v
++------------------------------+
+|  Return Context             |
++------------------------------+
+      |---(3) Sends Back--->
+      v
++------------------------------+
+| Chat Agent                  |
++------------------------------+
+      |---(4) Final Answer--->
+      v
++------------------------------+
+|  Grounded Answer            |
++------------------------------+
 ```
 
 ---
 
-## 🔁 LangGraph Flow (Textual View)
-
-```text
-+----------------+
-|   User Input   |
-+----------------+
-        |
-        v
-+----------------+
-|   Chat Agent   |
-| (LLM Decision) |
-+----------------+
-   |      |
-   | No   | Yes
-   v      v
-+------+  +--------------------+
-| Done |  |  Tool Node         |
-+------+  | (Retriever/Docs)   |
-          +--------------------+
-                   |
-                   v
-         +------------------+
-         | Return to Agent  |
-         +------------------+
-```
-
----
-
-## 🔧 Tools Used
+## 🧰 Tools Used
 
 | Role             | Tool / Method                          |
 | ---------------- | -------------------------------------- |
@@ -72,7 +87,7 @@ flowchart TD
 ## 📓 Notebook Demo
 
 Interactive walkthrough:
-[Colab Link](https://colab.research.google.com/github/cbratkovics/agentic-legal-assistant/blob/main/agentic_legal_assistant_demo.ipynb)
+👉 [Colab Demo](https://colab.research.google.com/github/cbratkovics/agentic-legal-assistant/blob/main/agentic_legal_assistant_demo.ipynb)
 
 Or run locally:
 
@@ -84,21 +99,21 @@ jupyter notebook agentic_legal_assistant_demo.ipynb
 
 ## 📄 Example Use Case
 
-> *“Does this contract allow early termination?”*
+> “Does this contract allow early termination?”
 
-→ The assistant reads the contract, identifies the termination clause, and responds with citations.
+✅ The assistant reads the contract, finds the termination clause, and returns a citation-backed answer.
 
 ---
 
 ## 🚀 Run Locally
 
-### 1. Clone & Install
+### 1. Clone & Setup
 
 ```bash
 git clone https://github.com/cbratkovics/agentic-legal-assistant.git
 cd agentic-legal-assistant
 
-# Create or activate environment
+# Create environment
 conda create -n agentic python=3.10 -y
 conda activate agentic
 
@@ -106,7 +121,7 @@ conda activate agentic
 pip install -r requirements.txt
 ```
 
-### 2. Run Agent Pipeline via CLI
+### 2. Run the Agent
 
 ```bash
 python src/main.py --pdf contracts/sample_contract.pdf \
@@ -126,13 +141,13 @@ A: Yes, the contract includes a clause that allows either party to terminate wit
 
 ---
 
-## 📁 Project Layout
+## 🗂 Project Layout
 
 ```
 agentic-legal-assistant/
 ├── contracts/                  ← Input PDFs
-├── outputs/                    ← Saved Q&A logs
-├── src/                        ← Core agent pipeline
+├── outputs/                    ← Saved Q&A logs + diagram
+├── src/                        ← Core agent logic
 ├── agentic_legal_assistant_demo.ipynb
 ├── requirements.txt
 ├── README.md
@@ -141,21 +156,21 @@ agentic-legal-assistant/
 
 ---
 
-## 🔒 API Key Setup
+## 🔐 API Key Setup
 
-Set your OpenAI key as an environment variable:
+Set your OpenAI key in the environment:
 
 ```bash
 export OPENAI_API_KEY=sk-xxxx
 ```
 
-Or use a `.env` file:
+Or via `.env`:
 
 ```
 OPENAI_API_KEY=sk-xxxx
 ```
 
-And load it using `python-dotenv` in code:
+Load in code with:
 
 ```python
 from dotenv import load_dotenv
