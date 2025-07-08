@@ -1,0 +1,20 @@
+# Core libraries
+langchain
+langgraph
+chromadb
+
+# LLMs and Embeddings
+langchain-openai
+langchain-huggingface
+
+# PDF loading
+pypdf
+
+# Jupyter and logging
+ipywidgets
+tqdm
+python-dotenv
+
+# Optional, but helpful
+notebook
+matplotlib
