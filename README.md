@@ -1,21 +1,20 @@
-````markdown
-# 🧠 Agentic Legal Assistant
+# Agentic Legal Assistant
 
-A LangGraph-powered multi-agent AI system for answering legal questions grounded in uploaded contracts. This project leverages Retrieval-Augmented Generation (RAG) to extract and cite relevant sections from legal documents like contracts and agreements.
-
----
-
-## ✅ Key Features
-
-- 🔍 Accepts natural language legal questions
-- 📄 Parses uploaded PDF contracts
-- 🧠 Uses multi-agent LangGraph orchestration
-- 📚 Retrieves relevant context with citations
-- ✍️ Returns grounded summaries using OpenAI GPT-4
+A **LangGraph-powered multi-agent system** that answers legal questions grounded in uploaded contracts. Uses **Retrieval-Augmented Generation (RAG)** to identify, extract, and cite relevant legal sections.
 
 ---
 
-## 🏗️ Architecture
+## ✅ Features
+
+- Accepts natural language legal questions
+- Parses PDF contracts
+- Uses multi-agent orchestration with LangGraph
+- Retrieves contextually relevant text with citation
+- Responds with grounded answers using GPT-4
+
+---
+
+## 🧠 Architecture
 
 ```mermaid
 flowchart TD
@@ -26,17 +25,18 @@ flowchart TD
     B -->|Responds| E[Grounded Answer with Citation]
 ```
 
+---
 
-### Agent Workflow:
+### 🧩 Agent Workflow
 
-1. **User** submits a legal question.
-2. **Chat Agent** decides whether to invoke a tool.
-3. **Tool Node** performs retrieval from vector DB.
-4. **Chat Agent** uses result to respond or loop back for more context.
+1. **User** submits a question
+2. **Chat Agent** (LLM) decides if retrieval is required
+3. **Tool Node** fetches legal context
+4. **Agent** composes and returns grounded answer
 
 ---
 
-### 🔁 LangGraph Flow (Textual View)
+## 🔁 LangGraph Flow (Textual View)
 
 ```text
 +----------------+
@@ -60,27 +60,26 @@ flowchart TD
          +------------------+
          | Return to Agent  |
          +------------------+
-````
+```
 
 ---
 
-## 🔧 Tools Used
+## 🧰 Tech Stack
 
-| Role             | Tool / Method                          |
-| ---------------- | -------------------------------------- |
-| Language Model   | OpenAI GPT-4 via LangChain             |
+| Component         | Tool/Library                          |
+|------------------|----------------------------------------|
+| LLM              | OpenAI GPT-4 via `langchain-openai`    |
+| Agent Framework  | LangGraph                              |
 | Document Parsing | `PyPDFLoader`                          |
-| Embedding        | `HuggingFaceEmbeddings`                |
-| Retrieval        | `Chroma` vector store                  |
-| Agent Framework  | `LangGraph`                            |
-| Agent Logic      | `StateGraph`, `RunnableLambda`, Memory |
+| Embedding Model  | `HuggingFaceEmbeddings`                |
+| Vector Store     | `Chroma`                               |
+| Orchestration    | `StateGraph`, `RunnableLambda`, Memory |
 
 ---
 
-## 📓 Notebook Demo
+## 📓 Interactive Notebook
 
-Interactive walkthrough:
-[Colab Link](https://colab.research.google.com/github/cbratkovics/agentic-legal-assistant/blob/main/agentic_legal_assistant_demo.ipynb)
+View or run via [Colab](https://colab.research.google.com/github/cbratkovics/agentic-legal-assistant/blob/main/agentic_legal_assistant_demo.ipynb)
 
 Or run locally:
 
@@ -92,40 +91,39 @@ jupyter notebook agentic_legal_assistant_demo.ipynb
 
 ## 📄 Example Use Case
 
-> *“Does this contract allow early termination?”*
+> “Does this contract allow early termination?”
 
-→ The assistant reads the contract, identifies the termination clause, and responds with citations.
+→ The assistant finds and cites the termination clause from the PDF and responds with a summary.
 
 ---
 
-## 🚀 Run Locally
+## 🚀 Quickstart
 
-### 1. Clone & Install
+### Step 1: Install
 
 ```bash
 git clone https://github.com/cbratkovics/agentic-legal-assistant.git
 cd agentic-legal-assistant
 
-# Create or activate environment
 conda create -n agentic python=3.10 -y
 conda activate agentic
 
-# Install dependencies
 pip install -r requirements.txt
 ```
 
-### 2. Run Agent Pipeline via CLI
+### Step 2: Run the CLI Agent
 
 ```bash
-python src/main.py --pdf contracts/sample_contract.pdf \
-                   --questions "What are the payment terms?" "Is there a termination clause?"
+python src/main.py \
+  --pdf contracts/sample_contract.pdf \
+  --questions "What are the payment terms?" "Is there a termination clause?"
 ```
 
-Answers saved to: `outputs/qa_log.jsonl`
+Results saved to: `outputs/qa_log.jsonl`
 
 ---
 
-## 🧪 Example Output
+## 🧪 Sample Output
 
 ```
 Q: Does this contract allow early termination?
@@ -134,36 +132,36 @@ A: Yes, the contract includes a clause that allows either party to terminate wit
 
 ---
 
-## 📁 Project Layout
+## 📁 Project Structure
 
 ```
 agentic-legal-assistant/
 ├── contracts/                  ← Input PDFs
-├── outputs/                    ← Saved Q&A logs
+├── outputs/                    ← Saved Q&A logs + diagrams
 ├── src/                        ← Core agent pipeline
 ├── agentic_legal_assistant_demo.ipynb
 ├── requirements.txt
-├── README.md
-└── architecture_diagram.png
+├── architecture_diagram.png
+└── README.md
 ```
 
 ---
 
-## 🔒 API Key Setup
+## 🔐 API Key Setup
 
-Set your OpenAI key as an environment variable:
+### Option 1: Export as env var
 
 ```bash
 export OPENAI_API_KEY=sk-xxxx
 ```
 
-Or use a `.env` file:
+### Option 2: Use `.env` file
 
 ```
 OPENAI_API_KEY=sk-xxxx
 ```
 
-And load it using `python-dotenv` in code:
+Then load in code:
 
 ```python
 from dotenv import load_dotenv
@@ -189,15 +187,15 @@ notebook
 
 ---
 
-## 📌 TODO / Extensions
+## 🔮 TODO
 
-* [ ] `.docx` and `.txt` support
-* [ ] Streamlit front-end
-* [ ] Highlight source text
-* [ ] Multi-document ingestion
+- [ ] Support `.docx` and `.txt`
+- [ ] Add Streamlit front-end
+- [ ] Highlight citations in original text
+- [ ] Multi-document chaining
 
 ---
 
-## 📝 License
+## 📄 License
 
-MIT License © 2025 Christopher Bratkovics
+MIT © 2025 Christopher Bratkovics
